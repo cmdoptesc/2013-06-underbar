@@ -24,7 +24,7 @@ describe("last", function() {
 
 });
 
-/*
+
 
 describe("first", function() {
   it("should be able to pull out the first element of an array", function() {
@@ -60,6 +60,8 @@ describe("each", function() {
     ]);
   });
 });
+
+
 
 describe("indexOf", function() {
 
@@ -185,6 +187,8 @@ describe("invoke with function reference", function() {
     expect(result[1]).to.eql([1, 2, 3]);
   });
 });
+
+/*
 
 describe("reduce", function() {
   it("should be able to sum up an array", function() {

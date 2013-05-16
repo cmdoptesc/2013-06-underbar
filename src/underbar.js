@@ -5,12 +5,30 @@ var _ = {};
   // Return an array of the last n elements of an array. If n is undefined,
   // return just the last element.
   _.last = function(array, n) {
+    if(n==undefined) {
+      return array[array.length-1];
+    }
+    else {
+      if(n>0) {
+        var args = Array.prototype.slice.call(array);
+        return args.slice(n*-1);
+      }
+      else {
+        return [];
+      }
+    }
   };
 
   // Like last, but for the first elements
   _.first = function(array, n) {
     // TIP: you can often re-use similar functions in clever ways, like so:
-    return _.last(array.reverse(), n);
+    // return _.last(array.reverse(), n);
+    var args = Array.prototype.slice.call(array);
+
+    var temp = _.last(args.reverse(), n);
+    
+    if(Array.isArray(temp)) return temp.reverse();
+    else return temp;
   };
 
 
@@ -40,16 +58,41 @@ var _ = {};
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, iterator) {
+    var filtered = new Array();
+
+    for(var i=0;i<collection.length;i++) {
+      if(iterator(collection[i])) {
+        filtered.push(collection[i]);
+      }
+    }
+    return filtered;
   };
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, iterator) {
     // TIP: see if you can re-use _.select() here, without simply
     // copying code in and modifying it
+
+    var rejected = new Array();
+
+    for(var i=0;i<collection.length;i++) {
+      if(!iterator(collection[i])) {
+        rejected.push(collection[i]);
+      }
+    }
+    return rejected;    // sadface
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
+    var uniques = new Array();
+
+    for(var i=0;i<array.length;i++) {
+      if(uniques.indexOf(array[i])===-1) {
+        uniques.push(array[i]);
+      }
+    }
+    return uniques;
   };
 
 
@@ -61,6 +104,10 @@ var _ = {};
 
   // Return the results of applying an iterator to each element.
   _.map = function(array, iterator) {
+    for(var i=0;i<array.length;i++) {
+      array[i] = iterator(array[i]);
+    }
+    return array;
   };
 
   /*
