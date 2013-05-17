@@ -33,7 +33,13 @@ var _ = {};
 
 
   // Call iterator(value, key, collection) for each element of collection
+
+  // assume meant "for each element of obj"
+
   _.each = function(obj, iterator) {
+    for(var i=0;i<obj.length;i++) {
+      iterator(obj[i],i,obj);
+    }
   };
 
   /*
@@ -127,6 +133,11 @@ var _ = {};
 
   // Calls the method named by methodName on each value in the list.
   _.invoke = function(list, methodName) {
+    for(var i=0;i<list.length;i++) {
+      var callMethod = "list[i]." + methodName + "()";
+      eval(callMethod);
+    }
+    return list;
   };
 
   // Reduces an array or object to a single value by repetitively calling
