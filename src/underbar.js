@@ -24,11 +24,9 @@ var _ = {};
     // TIP: you can often re-use similar functions in clever ways, like so:
     // return _.last(array.reverse(), n);
     var args = Array.prototype.slice.call(array);
-
-    var temp = _.last(args.reverse(), n);
+    var lastVal = _.last(args.reverse(), n);
     
-    if(Array.isArray(temp)) return temp.reverse();
-    else return temp;
+    return Array.isArray(lastVal) ? lastVal.reverse() : lastVal;
   };
 
 
@@ -37,7 +35,7 @@ var _ = {};
   // assume meant "for each element of obj"
 
   _.each = function(obj, iterator) {
-    for(var i=0;i<obj.length;i++) {
+    for(var i=0, len=obj.length; i<len; i++) {
       iterator(obj[i],i,obj);
     }
   };
@@ -66,11 +64,20 @@ var _ = {};
   _.filter = function(collection, iterator) {
     var filtered = new Array();
 
-    for(var i=0;i<collection.length;i++) {
-      if(iterator(collection[i])) {
-        filtered.push(collection[i]);
-      }
-    }
+    // for(var i=0;i<collection.length;i++) {
+    //   if(iterator(collection[i])) {
+    //     filtered.push(collection[i]);
+    //   }
+    // }
+    // return filtered;
+
+
+    // re-written using each();
+
+    _.each(collection, function(item, index) {
+      //console.log(item);
+      if(iterator(item)) filtered.push(item);
+    });
     return filtered;
   };
 
@@ -79,21 +86,28 @@ var _ = {};
     // TIP: see if you can re-use _.select() here, without simply
     // copying code in and modifying it
 
-    var rejected = new Array();
+    // var rejected = new Array();
 
-    for(var i=0;i<collection.length;i++) {
-      if(!iterator(collection[i])) {
-        rejected.push(collection[i]);
-      }
-    }
-    return rejected;    // sadface
+    // for(var i=0;i<collection.length;i++) {
+    //   if(!iterator(collection[i])) {
+    //     rejected.push(collection[i]);
+    //   }
+    // }
+    // return rejected;    // sadface
+
+
+    // re-written using filter();
+
+    return _.filter(collection, function (v) {
+      return !iterator(v);
+    });
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
     var uniques = new Array();
 
-    for(var i=0;i<array.length;i++) {
+    for(var i=0, len=array.length; i<len; i++) {
       if(uniques.indexOf(array[i])===-1) {
         uniques.push(array[i]);
       }
@@ -110,10 +124,21 @@ var _ = {};
 
   // Return the results of applying an iterator to each element.
   _.map = function(array, iterator) {
-    for(var i=0;i<array.length;i++) {
-      array[i] = iterator(array[i]);
-    }
-    return array;
+    // for(var i=0, len=array.length; i<len; i++) {
+    //   array[i] = iterator(array[i]);
+    // }
+    // return array;
+
+    // used each, but is it better in this case?
+
+    var newArray = new Array();
+
+    _.each(array, function(item) {
+      //console.log(iterator(v));
+      newArray.push(iterator(item));
+    });
+
+    return newArray;
   };
 
   /*
@@ -131,13 +156,20 @@ var _ = {};
     });
   };
 
-  // Calls the method named by methodName on each value in the list.
+
+// Calls the method named by methodName on each value in the list.
   _.invoke = function(list, methodName) {
-    for(var i=0;i<list.length;i++) {
-      var callMethod = "list[i]." + methodName + "()";
-      eval(callMethod);
-    }
-    return list;
+    // for(var i=0;i<list.length;i++) {
+    //   var callMethod = "list[i]." + methodName + "()";
+    //   eval(callMethod);
+    // }
+    // return list;
+
+    // with the help of CJ
+    return _.map(list, function(item) {
+      methodName = item[methodName] ? item[methodName] : methodName;
+      return methodName.apply(item);
+    });
   };
 
   // Reduces an array or object to a single value by repetitively calling
@@ -154,6 +186,14 @@ var _ = {};
   //   }, 0); // should be 6
   //
   _.reduce = function(obj, iterator, initialValue) {
+    if(initialValue==undefined) initialValue = 0;
+    var args = Array.prototype.slice.call(obj);
+
+    for(var i=0, len=args.length; i<len; i++) {
+      initialValue = iterator(initialValue,args[i]);
+    }
+
+    return initialValue;
   };
 
   // Determine if the array or object contains a given value (using `===`).
@@ -172,12 +212,23 @@ var _ = {};
   // Determine whether all of the elements match a truth test.
   _.every = function(obj, iterator) {
     // TIP: use reduce on this one!
+
+    return _.reduce(obj, function(prevVal, item) {
+      if(prevVal==false) return false;
+      if(iterator(item)==true) return true;
+      else return false;
+    },true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.any = function(obj, iterator) {
     // TIP: re-use every() here
+
+    // _.every(obj, function(item) {
+    //   if(iterator(item)==true) return true;
+    //   else return false;
+    // });
   };
 
 

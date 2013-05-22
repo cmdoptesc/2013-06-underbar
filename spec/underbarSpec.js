@@ -188,7 +188,7 @@ describe("invoke with function reference", function() {
   });
 });
 
-/*
+
 
 describe("reduce", function() {
   it("should be able to sum up an array", function() {
@@ -216,6 +216,8 @@ describe("contains", function() {
     expect(_.contains([1,3,9], 2)).to.equal(false);
   });
 });
+
+
 
 describe("every", function() {
   var getValue = function(i) { return i; };
@@ -253,6 +255,8 @@ describe("every", function() {
     expect(_.every([undefined, undefined, undefined], getValue)).to.equal(false);
   });
 });
+
+
 
 describe("any", function() {
   var nativeSome = Array.prototype.some;
@@ -306,6 +310,8 @@ describe("any", function() {
     expect(_.any([0], passThrough)).to.equal(false);
   });
 });
+
+/*
 
 describe("extend", function() {
   it("should extend an object with the attributes of another", function() {
