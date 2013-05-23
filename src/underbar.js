@@ -225,10 +225,16 @@ var _ = {};
   _.any = function(obj, iterator) {
     // TIP: re-use every() here
 
-    // _.every(obj, function(item) {
-    //   if(iterator(item)==true) return true;
-    //   else return false;
-    // });
+    if(iterator==undefined) {
+      var iterator = function(item) {
+        return item;
+      }
+    }
+
+    // Thanks Tony!
+    return !(_.every(obj, function(item) {
+      return !item;
+    }));
   };
 
 
