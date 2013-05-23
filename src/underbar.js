@@ -233,7 +233,7 @@ var _ = {};
 
     // Thanks Tony!
     return !(_.every(obj, function(item) {
-      return !item;
+      return !iterator(item);
     }));
   };
 
